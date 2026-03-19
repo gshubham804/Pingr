@@ -1,0 +1,36 @@
+{
+  "name": "pingr",
+  "version": "1.0.0",
+  "description": "Real-time messaging platform",
+  "author": "ordinaryBoy",
+  "license": "ISC",
+  "type": "module",
+
+  "main": "dist/server.js",
+
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.12.0",
+    "socket.io": "^4.8.3",
+    "zod": "^4.3.6"
+  },
+
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.11.30",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.5"
+  }
+}
