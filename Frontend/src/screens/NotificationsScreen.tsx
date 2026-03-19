@@ -8,6 +8,7 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { useTheme } from "../theme/useTheme";
 import { useNotifStore } from "../state/notifStore";
 import {
@@ -24,10 +25,26 @@ import type { TabParamList } from "../navigation/RootNavigator";
 
 type NavProp = BottomTabNavigationProp<TabParamList, "Notifications">;
 
-function notifIcon(type: AppNotification["type"]) {
-  if (type === "friend_request") return "👋";
-  if (type === "friend_accepted") return "🎉";
-  return "💬";
+function NotificationIcon({ type, theme }: { type: AppNotification["type"]; theme: any }) {
+  let iconName: any = "message-circle";
+  let color = theme.colors.textSecondary;
+  let bg = theme.colors.textSecondary + "15";
+
+  if (type === "friend_request") {
+    iconName = "user-plus";
+    color = theme.colors.primary;
+    bg = theme.colors.primary + "15";
+  } else if (type === "friend_accepted") {
+    iconName = "user-check";
+    color = "#3B82F6";
+    bg = "#3B82F615";
+  }
+
+  return (
+    <View style={[styles.iconWrapper, { backgroundColor: bg }]}>
+      <Feather name={iconName} size={20} color={color} />
+    </View>
+  );
 }
 
 function notifLabel(type: AppNotification["type"]) {
@@ -104,7 +121,7 @@ export default function NotificationsScreen() {
         },
       ]}
     >
-      <Text style={styles.icon}>{notifIcon(item.type)}</Text>
+      <NotificationIcon type={item.type} theme={theme} />
       <View style={{ flex: 1 }}>
         <Text style={[styles.label, { color: theme.colors.textPrimary }]}>
           {notifLabel(item.type)}
@@ -136,7 +153,7 @@ export default function NotificationsScreen() {
         contentContainerStyle={notifications.length === 0 ? { flex: 1 } : undefined}
         ListEmptyComponent={
           <EmptyState
-            icon="🔔"
+            iconName="bell"
             title="All caught up!"
             subtitle="You have no notifications yet."
           />
@@ -155,11 +172,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    gap: 12,
+    gap: 16,
   },
-  icon: { fontSize: 28 },
-  label: { fontSize: 14, fontWeight: "600" },
-  time: { fontSize: 12, marginTop: 3 },
+  iconWrapper: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  label: { fontSize: 15, fontWeight: "600" },
+  time: { fontSize: 12, marginTop: 4 },
   unreadDot: {
     width: 8,
     height: 8,

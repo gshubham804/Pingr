@@ -9,6 +9,7 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { useTheme } from "../theme/useTheme";
 import { useAuthStore } from "../state/authStore";
 import { useFriendStore } from "../state/friendStore";
@@ -125,9 +126,12 @@ export default function PeopleScreen() {
         {friend ? (
           <Pressable
             onPress={() => openChat(item)}
-            style={[styles.btn, { backgroundColor: theme.colors.primary }]}
+            style={({ pressed }) => [
+              styles.iconBtn,
+              { backgroundColor: theme.colors.primary + "15", opacity: pressed ? 0.7 : 1 }
+            ]}
           >
-            <Text style={styles.btnText}>Chat</Text>
+            <Feather name="message-circle" size={18} color={theme.colors.primary} />
           </Pressable>
         ) : (
           <Pressable
@@ -145,6 +149,7 @@ export default function PeopleScreen() {
               },
             ]}
           >
+            {status === "none" && <Feather name="user-plus" size={14} color="#FFF" style={{ marginRight: 6 }} />}
             <Text style={[styles.btnText, { color: status === "sent" ? theme.colors.textSecondary : "#fff" }]}>
               {status === "sent" ? "Sent" : status === "sending" ? "…" : "Add"}
             </Text>
@@ -157,13 +162,13 @@ export default function PeopleScreen() {
   const renderFriend = ({ item }: { item: UserProfile }) => (
     <Pressable
       onPress={() => openChat(item)}
-      style={[
+      style={({ pressed }) => [
         styles.row,
-        { backgroundColor: theme.colors.surface, borderBottomColor: theme.colors.border },
+        { backgroundColor: pressed ? theme.colors.border : theme.colors.surface, borderBottomColor: theme.colors.border },
       ]}
     >
       <View style={{ marginRight: 12 }}>
-        <Avatar uri={item.profile?.avatar} name={item.fullName} size={46} />
+        <Avatar uri={item.profile?.avatar} name={item.fullName} size={50} />
         {item.isOnline && (
           <View style={[styles.onlineDot, { borderColor: theme.colors.surface }]} />
         )}
@@ -174,7 +179,9 @@ export default function PeopleScreen() {
           {item.isOnline ? "Online" : "Offline"}
         </Text>
       </View>
-      <Text style={{ color: theme.colors.primary, fontSize: 13, fontWeight: "600" }}>Chat →</Text>
+      <View style={[styles.iconBtn, { backgroundColor: theme.colors.primary + "15" }]}>
+        <Feather name="message-circle" size={18} color={theme.colors.primary} />
+      </View>
     </Pressable>
   );
 
@@ -182,7 +189,7 @@ export default function PeopleScreen() {
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       {/* Search bar */}
       <View style={[styles.searchBar, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
-        <Text style={{ color: theme.colors.textSecondary, fontSize: 16, marginRight: 8 }}>🔍</Text>
+        <Feather name="search" size={20} color={theme.colors.textSecondary} style={{ marginRight: 10 }} />
         <TextInput
           style={[styles.searchInput, { color: theme.colors.textPrimary }]}
           value={query}
@@ -202,7 +209,7 @@ export default function PeopleScreen() {
           contentContainerStyle={results.length === 0 ? { flex: 1 } : undefined}
           ListEmptyComponent={
             !searching ? (
-              <EmptyState icon="🔎" title="No users found" subtitle="Try a different name or email." />
+              <EmptyState iconName="search" title="No users found" subtitle="Try a different name or email." />
             ) : null
           }
         />
@@ -218,7 +225,7 @@ export default function PeopleScreen() {
           }
           contentContainerStyle={friends.length === 0 ? { flex: 1 } : undefined}
           ListEmptyComponent={
-            <EmptyState icon="👥" title="No friends yet" subtitle="Search for people above to connect." />
+            <EmptyState iconName="users" title="No friends yet" subtitle="Search for people above to connect." />
           }
         />
       )}
@@ -255,14 +262,23 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   rowInfo: { flex: 1 },
-  name: { fontSize: 15, fontWeight: "600" },
-  email: { fontSize: 12, marginTop: 2 },
+  name: { fontSize: 16, fontWeight: "600", letterSpacing: 0.2 },
+  email: { fontSize: 13, marginTop: 2 },
   btn: {
-    paddingHorizontal: 14,
-    paddingVertical: 7,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     borderRadius: 20,
-    minWidth: 56,
+    minWidth: 70,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+  },
+  iconBtn: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
   },
   btnText: { color: "#fff", fontSize: 13, fontWeight: "700" },
   onlineDot: {

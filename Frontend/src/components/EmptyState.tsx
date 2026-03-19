@@ -1,17 +1,18 @@
 import { View, Text, StyleSheet } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { useTheme } from "../theme/useTheme";
 
 type Props = {
-  icon?: string;
+  iconName?: React.ComponentProps<typeof Feather>["name"];
   title: string;
   subtitle?: string;
 };
 
-export default function EmptyState({ icon = "💬", title, subtitle }: Props) {
+export default function EmptyState({ iconName = "message-circle", title, subtitle }: Props) {
   const theme = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>{icon}</Text>
+      <Feather name={iconName} size={56} color={theme.colors.textSecondary} style={styles.icon} />
       <Text style={[styles.title, { color: theme.colors.textPrimary }]}>{title}</Text>
       {subtitle ? (
         <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>{subtitle}</Text>
@@ -29,8 +30,8 @@ const styles = StyleSheet.create({
     paddingVertical: 64,
   },
   icon: {
-    fontSize: 52,
-    marginBottom: 16,
+    marginBottom: 20,
+    opacity: 0.8,
   },
   title: {
     fontSize: 18,

@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTheme } from "../theme/useTheme";
@@ -112,7 +113,7 @@ export default function ChatsScreen() {
         contentContainerStyle={conversations.length === 0 ? { flex: 1 } : undefined}
         ListEmptyComponent={
           <EmptyState
-            icon="💬"
+            iconName="message-square"
             title="No conversations yet"
             subtitle="Find people in the People tab and start chatting."
           />
@@ -122,9 +123,12 @@ export default function ChatsScreen() {
       {/* FAB */}
       <Pressable
         onPress={() => navigation.getParent()?.navigate("People")}
-        style={[styles.fab, { backgroundColor: theme.colors.primary }]}
+        style={({ pressed }) => [
+          styles.fab,
+          { backgroundColor: theme.colors.primary, opacity: pressed ? 0.8 : 1 }
+        ]}
       >
-        <Text style={styles.fabIcon}>✏️</Text>
+        <Feather name="edit-2" size={24} color="#FFF" />
       </Pressable>
     </View>
   );
@@ -152,9 +156,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 2,
     right: 2,
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
     backgroundColor: "#22C55E",
     borderWidth: 2,
   },
