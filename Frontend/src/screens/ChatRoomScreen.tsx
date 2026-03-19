@@ -109,7 +109,8 @@ export default function ChatRoomScreen({ route, navigation }: Props) {
   };
 
   const renderBubble = ({ item }: { item: Message }) => {
-    const isMe = item.senderId === myId;
+    const sId = typeof item.senderId === "string" ? item.senderId : (item.senderId as any)?._id;
+    const isMe = sId === myId;
     return (
       <View
         style={[
@@ -170,7 +171,7 @@ export default function ChatRoomScreen({ route, navigation }: Props) {
           keyExtractor={(item) => item._id}
           renderItem={renderBubble}
           contentContainerStyle={styles.list}
-          onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}
+          inverted
         />
       )}
 

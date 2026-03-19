@@ -122,7 +122,7 @@ export default function ChatsScreen() {
 
       {/* FAB */}
       <Pressable
-        onPress={() => navigation.getParent()?.navigate("People")}
+        onPress={() => navigation.navigate("People" as any)}
         style={({ pressed }) => [
           styles.fab,
           { backgroundColor: theme.colors.primary, opacity: pressed ? 0.8 : 1 }

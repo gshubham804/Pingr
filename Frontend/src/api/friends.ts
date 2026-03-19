@@ -18,8 +18,8 @@ export type FriendUser = {
 
 export type FriendRequest = {
   _id: string;
-  from: FriendUser;
-  to: string;
+  fromUser: FriendUser;
+  toUser: string;
   status: "pending" | "accepted" | "rejected";
   createdAt: string;
 };

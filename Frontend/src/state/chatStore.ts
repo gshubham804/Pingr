@@ -30,13 +30,22 @@ export const useChatStore = create<ChatState>((set) => ({
     })),
 
   addMessage: (conversationId, message) =>
-    set((state) => ({
-      messages: {
-        ...state.messages,
-        [conversationId]: [
-          ...(state.messages[conversationId] ?? []),
-          message,
-        ],
-      },
-    })),
+    set((state) => {
+      const updatedMessages = [message, ...(state.messages[conversationId] ?? [])];
+      
+      const updatedConvos = state.conversations.map((c) =>
+        c._id === conversationId
+          ? { ...c, lastMessage: message, updatedAt: new Date().toISOString() }
+          : c
+      );
+
+      updatedConvos.sort(
+        (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      );
+
+      return {
+        messages: { ...state.messages, [conversationId]: updatedMessages },
+        conversations: updatedConvos,
+      };
+    }),
 }));

@@ -68,13 +68,13 @@ export default function FriendRequestsScreen() {
           { backgroundColor: theme.colors.surface, borderBottomColor: theme.colors.border },
         ]}
       >
-        <Avatar uri={item.from.profile?.avatar} name={item.from.fullName} size={50} />
+        <Avatar uri={item.fromUser.profile?.avatar} name={item.fromUser.fullName} size={50} />
         <View style={styles.info}>
           <Text style={[styles.name, { color: theme.colors.textPrimary }]}>
-            {item.from.fullName}
+            {item.fromUser.fullName}
           </Text>
           <Text style={[styles.email, { color: theme.colors.textSecondary }]}>
-            {item.from.email}
+            {item.fromUser.email}
           </Text>
           <Text style={[styles.time, { color: theme.colors.textSecondary }]}>
             {new Date(item.createdAt).toLocaleDateString(undefined, {
@@ -122,7 +122,7 @@ export default function FriendRequestsScreen() {
         contentContainerStyle={pendingRequests.length === 0 ? { flex: 1 } : undefined}
         ListEmptyComponent={
           <EmptyState
-            icon="🤝"
+            iconName="user-plus"
             title="No pending requests"
             subtitle="When someone sends you a friend request, it'll appear here."
           />
