@@ -6,9 +6,9 @@ import Input from "../components/Input";
 import { useTheme } from "../theme/useTheme";
 import { useAuthStore } from "../state/authStore";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import type { RootStackParamList } from "../navigation/RootNavigator";
+import type { AuthStackParamList } from "../navigation/RootNavigator";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Register">;
+type Props = NativeStackScreenProps<AuthStackParamList, "Register">;
 
 export default function RegisterScreen({ navigation }: Props) {
   const theme = useTheme();
