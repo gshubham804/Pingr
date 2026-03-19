@@ -12,7 +12,7 @@ export const search = async (req: Request, res: Response, next: NextFunction): P
         const users = await searchUsers(query, req.user!.userId);
         res.status(200).json(new ApiResponse(200, "Search results", users));
     } catch (error) {
-        next(new ApiError(500, "Internal server error"));
+        next(error instanceof ApiError ? error : new ApiError(500, "Internal server error"));
     }
 };
 
@@ -23,7 +23,7 @@ export const getMe = async (req: Request, res: Response, next: NextFunction): Pr
         const user = await getUserProfile(req.user!.userId);
         res.status(200).json(new ApiResponse(200, "Profile fetched", user));
     } catch (error) {
-        next(new ApiError(500, "Internal server error"));
+        next(error instanceof ApiError ? error : new ApiError(500, "Internal server error"));
     }
 };
 
@@ -34,7 +34,7 @@ export const getProfile = async (req: Request, res: Response, next: NextFunction
         const user = await getUserProfile(userId);
         res.status(200).json(new ApiResponse(200, "Profile fetched", user));
     } catch (error) {
-        next(new ApiError(500, "Internal server error"))
+        next(error instanceof ApiError ? error : new ApiError(500, "Internal server error"));
     }
 };
 

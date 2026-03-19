@@ -43,7 +43,7 @@ export const apiUpdateProfile = async (body: {
   location?: string;
   avatar?: string;
 }) => {
-  const res = await http.put<ApiResponse<Me>>("/api/users/me", body);
+  const res = await http.put<ApiResponse<Me>>("/api/users/me", { profile: body });
   return res.data;
 };
 

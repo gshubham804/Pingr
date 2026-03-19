@@ -17,7 +17,7 @@ export const sendRequest = async(req: Request, res: Response, next: NextFunction
         const request = await sendFriendRequest(fromUserId, toUserId);
         res.status(201).json(new ApiResponse(201, "Friend request sent", request));
     } catch (error) {
-        next(new ApiError(500, "Internal server error"))
+        next(error instanceof ApiError ? error : new ApiError(500, "Internal server error"));
     }
 }
 
@@ -37,7 +37,7 @@ export const respondRequest = async(req: Request, res: Response, next: NextFunct
         const request = await respondToFriendRequest(requestId, userId, action);
         res.status(200).json(new ApiResponse(200, `Request ${action}ed`, request))
     } catch (error) {
-        next(new ApiError(500, "Internal server error"));
+        next(error instanceof ApiError ? error : new ApiError(500, "Internal server error"));
     }
 }
 
@@ -48,7 +48,7 @@ export const getPending = async(req: Request, res: Response, next: NextFunction)
         const requests = await getPendingRequests(userId);
         res.status(200).json(new ApiResponse(200, "Pending requests fetched", requests));
     } catch (error) {
-        next(new ApiError(500, "Internal server error"));
+        next(error instanceof ApiError ? error : new ApiError(500, "Internal server error"));
     }
 }
 
@@ -59,6 +59,6 @@ export const getFriends = async(req: Request, res: Response, next: NextFunction)
         const friends = await getFriendsList(userId);
         res.status(200).json(new ApiResponse(200, "Friends list fetched", friends));
     } catch (error) {
-        next(new ApiError(500, "Internal server error"));
+        next(error instanceof ApiError ? error : new ApiError(500, "Internal server error"));
     }
 }

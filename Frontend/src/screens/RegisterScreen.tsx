@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Alert, StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { apiRegister } from "../api/auth";
 import Button from "../components/Button";
 import Input from "../components/Input";
@@ -29,7 +30,8 @@ export default function RegisterScreen({ navigation }: Props) {
       }
       await setAuth(res.data.token, res.data.user);
     } catch (e: any) {
-      Alert.alert("Registration failed", e?.message ?? "Network error");
+      const msg = e.response?.data?.message || e.message || "Network error";
+      Alert.alert("Registration failed", msg);
     } finally {
       setLoading(false);
     }
@@ -41,8 +43,13 @@ export default function RegisterScreen({ navigation }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Text style={[styles.title, { color: theme.colors.textPrimary }]}>Create account</Text>
-        <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>Start chatting in minutes</Text>
+        <View style={styles.header}>
+          <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary + "20" }]}>
+            <Feather name="user-plus" size={36} color={theme.colors.primary} />
+          </View>
+          <Text style={[styles.title, { color: theme.colors.textPrimary }]}>Create account</Text>
+          <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>Start chatting in minutes</Text>
+        </View>
 
         <View style={{ marginTop: theme.spacing.lg }}>
           <Input label="Full name" value={fullName} onChangeText={setFullName} placeholder="Your name" autoCapitalize="words" />
@@ -50,9 +57,10 @@ export default function RegisterScreen({ navigation }: Props) {
           <Input label="Password" value={password} onChangeText={setPassword} placeholder="••••••••" secureTextEntry />
 
           <Button
-            title={loading ? "Creating..." : "Create account"}
+            title="Create account"
             onPress={onRegister}
-            disabled={loading || !fullName || !email || !password}
+            loading={loading}
+            disabled={!fullName || !email || !password}
           />
           <Button
             title="I already have an account"
@@ -72,6 +80,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 16,
     justifyContent: "center",
+  },
+  header: {
+    alignItems: "center",
+    marginBottom: 32,
+  },
+  iconContainer: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 16,
   },
   title: {
     fontSize: 22,

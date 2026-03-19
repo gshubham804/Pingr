@@ -53,24 +53,23 @@ const Tab = createBottomTabNavigator<TabParamList>();
 
 // ----- Tab Icon helper -----
 
+import { Feather } from "@expo/vector-icons";
+
 function TabIcon({
-  emoji,
+  name,
   focused,
   primary,
 }: {
-  emoji: string;
+  name: keyof typeof Feather.glyphMap;
   focused: boolean;
   primary: string;
 }) {
   return (
-    <Text
-      style={{
-        fontSize: 22,
-        opacity: focused ? 1 : 0.45,
-      }}
-    >
-      {emoji}
-    </Text>
+    <Feather
+      name={name}
+      size={24}
+      color={focused ? primary : "#94A3B8"}
+    />
   );
 }
 
@@ -88,15 +87,19 @@ function MainTabs() {
         headerTintColor: theme.colors.textPrimary,
         tabBarStyle: {
           backgroundColor: theme.colors.surface,
-          borderTopColor: theme.colors.border,
-          borderTopWidth: 1,
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 6,
+          borderTopWidth: 0,
+          elevation: 20,
+          shadowColor: theme.mode === "dark" ? "#000" : theme.colors.primary,
+          shadowOpacity: theme.mode === "dark" ? 0.3 : 0.08,
+          shadowRadius: 20,
+          shadowOffset: { width: 0, height: -5 },
+          height: 65,
+          paddingBottom: 10,
+          paddingTop: 10,
         },
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.textSecondary,
-        tabBarLabelStyle: { fontSize: 10, fontWeight: "700" },
+        tabBarLabelStyle: { fontSize: 11, fontWeight: "700", marginTop: 4 },
       }}
     >
       <Tab.Screen
@@ -105,7 +108,7 @@ function MainTabs() {
         options={{
           title: "Chats",
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="💬" focused={focused} primary={theme.colors.primary} />
+            <TabIcon name="message-circle" focused={focused} primary={theme.colors.primary} />
           ),
         }}
       />
@@ -115,7 +118,7 @@ function MainTabs() {
         options={{
           title: "People",
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="👥" focused={focused} primary={theme.colors.primary} />
+            <TabIcon name="users" focused={focused} primary={theme.colors.primary} />
           ),
         }}
       />
@@ -126,7 +129,7 @@ function MainTabs() {
           title: "Alerts",
           tabBarIcon: ({ focused }) => (
             <View>
-              <TabIcon emoji="🔔" focused={focused} primary={theme.colors.primary} />
+              <TabIcon name="bell" focused={focused} primary={theme.colors.primary} />
               <Badge count={unreadCount} />
             </View>
           ),
@@ -138,7 +141,7 @@ function MainTabs() {
         options={{
           title: "Profile",
           tabBarIcon: ({ focused }) => (
-            <TabIcon emoji="👤" focused={focused} primary={theme.colors.primary} />
+            <TabIcon name="user" focused={focused} primary={theme.colors.primary} />
           ),
         }}
       />
