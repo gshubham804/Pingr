@@ -1,4 +1,6 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { useState } from "react";
+import { StyleSheet, Text, TextInput, View, Pressable } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { useTheme } from "../theme/useTheme";
 
 type Props = {
@@ -21,27 +23,45 @@ export default function Input({
   keyboardType = "default",
 }: Props) {
   const theme = useTheme();
+  const [isSecure, setIsSecure] = useState(secureTextEntry);
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
     <View style={{ marginBottom: theme.spacing.md }}>
       <Text style={[styles.label, { color: theme.colors.textSecondary }]}>{label}</Text>
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor={theme.mode === "dark" ? "#64748B" : "#94A3B8"}
-        secureTextEntry={secureTextEntry}
-        autoCapitalize={autoCapitalize}
-        keyboardType={keyboardType}
+      <View
         style={[
-          styles.input,
+          styles.inputContainer,
           {
             backgroundColor: theme.colors.surface,
-            borderColor: theme.colors.border,
-            color: theme.colors.textPrimary,
+            borderColor: isFocused ? theme.colors.primary : theme.colors.border,
+            borderWidth: isFocused ? 1.5 : 1, // Slightly thicker border on focus for better visibility
             borderRadius: theme.radii.md,
           },
         ]}
-      />
+      >
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          placeholder={placeholder}
+          placeholderTextColor={theme.mode === "dark" ? "#64748B" : "#94A3B8"}
+          secureTextEntry={isSecure}
+          autoCapitalize={autoCapitalize}
+          keyboardType={keyboardType}
+          style={[styles.input, { color: theme.colors.textPrimary }]}
+        />
+        {secureTextEntry && (
+          <Pressable onPress={() => setIsSecure(!isSecure)} style={styles.eyeBtn}>
+            <Feather 
+              name={isSecure ? "eye" : "eye-off"} 
+              size={18} 
+              color={theme.colors.textSecondary} 
+            />
+          </Pressable>
+        )}
+      </View>
     </View>
   );
 }
@@ -52,11 +72,21 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 6,
   },
-  input: {
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
+  },
+  input: {
+    flex: 1,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 14,
+  },
+  eyeBtn: {
+    paddingHorizontal: 12,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

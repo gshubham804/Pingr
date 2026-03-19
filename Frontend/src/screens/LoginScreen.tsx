@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import { apiLogin } from "../api/auth";
 import Button from "../components/Button";
 import Input from "../components/Input";
@@ -35,30 +35,35 @@ export default function LoginScreen({ navigation }: Props) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={[styles.title, { color: theme.colors.textPrimary }]}>Pingr</Text>
-      <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>Sign in to continue</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+        <Text style={[styles.title, { color: theme.colors.textPrimary }]}>Pingr</Text>
+        <Text style={[styles.subtitle, { color: theme.colors.textSecondary }]}>Sign in to continue</Text>
 
-      <View style={{ marginTop: theme.spacing.lg }}>
-        <Input label="Email" value={email} onChangeText={setEmail} placeholder="you@domain.com" keyboardType="email-address" />
-        <Input label="Password" value={password} onChangeText={setPassword} placeholder="••••••••" secureTextEntry />
+        <View style={{ marginTop: theme.spacing.lg }}>
+          <Input label="Email" value={email} onChangeText={setEmail} placeholder="you@domain.com" keyboardType="email-address" />
+          <Input label="Password" value={password} onChangeText={setPassword} placeholder="••••••••" secureTextEntry />
 
-        <Button title={loading ? "Signing in..." : "Sign in"} onPress={onLogin} disabled={loading || !email || !password} />
-        <Button
-          title="Create an account"
-          variant="secondary"
-          onPress={() => navigation.navigate("Register")}
-          disabled={loading}
-          style={{ marginTop: theme.spacing.sm }}
-        />
-      </View>
-    </View>
+          <Button title={loading ? "Signing in..." : "Sign in"} onPress={onLogin} disabled={loading || !email || !password} />
+          <Button
+            title="Create an account"
+            variant="secondary"
+            onPress={() => navigation.navigate("Register")}
+            disabled={loading}
+            style={{ marginTop: theme.spacing.sm }}
+          />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 16,
     justifyContent: "center",
   },

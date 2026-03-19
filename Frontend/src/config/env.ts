@@ -1,4 +1,5 @@
 import Constants from "expo-constants";
+import { Platform } from "react-native";
 
 type Extra = {
   API_BASE_URL?: string;
@@ -6,9 +7,16 @@ type Extra = {
 
 const extra = (Constants.expoConfig?.extra ?? {}) as Extra;
 
-// Dynamically grab the local IP used by Expo (so you don't have to hardcode your local IP!)
-// This makes it work flawlessly on physical Android devices or Emulators on port 8800.
-const host = Constants.expoConfig?.hostUri?.split(":")[0] ?? "10.0.2.2";
+let host = Constants.expoConfig?.hostUri?.split(":")[0] ?? "10.0.2.2";
+
+// If Expo thinks the host is localhost, we need to fix it for Android emulators.
+// Android emulators cannot reach the laptop via localhost (they reach themselves).
+// They must use 10.0.2.2 to point to the host laptop.
+if (host === "127.0.0.1" || host === "localhost") {
+  host = Platform.OS === "android" ? "10.0.2.2" : "localhost";
+}
 
 export const API_BASE_URL = extra.API_BASE_URL ?? `http://${host}:8800`;
+
+console.log(`[NETWORK INIT] API_BASE_URL is set to: ${API_BASE_URL}`);
 
