@@ -108,6 +108,9 @@ export default function ChatRoomScreen({ route, navigation }: Props) {
     setText("");
   };
 
+  const incomingBubbleColor = theme.mode === "dark" ? "#1E293B" : "#E8EEF7";
+  const incomingBorderColor = theme.mode === "dark" ? "#334155" : "#D6E0EE";
+
   const renderBubble = ({ item }: { item: Message }) => {
     const sId = typeof item.senderId === "string" ? item.senderId : (item.senderId as any)?._id;
     const isMe = sId === myId;
@@ -115,15 +118,15 @@ export default function ChatRoomScreen({ route, navigation }: Props) {
       <View
         style={[
           styles.bubbleWrapper,
-          { justifyContent: isMe ? "flex-end" : "flex-start" },
+          { alignItems: isMe ? "flex-end" : "flex-start" },
         ]}
       >
         <View
           style={[
             styles.bubble,
             {
-              backgroundColor: isMe ? theme.colors.primary : theme.colors.surface,
-              borderColor: isMe ? theme.colors.primary : theme.colors.border,
+              backgroundColor: isMe ? theme.colors.primary : incomingBubbleColor,
+              borderColor: isMe ? theme.colors.primary : incomingBorderColor,
               borderBottomRightRadius: isMe ? 4 : theme.radii.lg,
               borderBottomLeftRadius: isMe ? theme.radii.lg : 4,
             },
@@ -223,7 +226,7 @@ export default function ChatRoomScreen({ route, navigation }: Props) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   list: { paddingHorizontal: 12, paddingVertical: 12, gap: 6 },
-  bubbleWrapper: { flexDirection: "row", marginVertical: 2 },
+  bubbleWrapper: { width: "100%", marginVertical: 2 },
   bubble: {
     maxWidth: "75%",
     paddingHorizontal: 14,
